@@ -1,0 +1,19 @@
+{
+  "name": "practice-app",
+  "version": "0.0.1",
+  "private": true,
+  "description": "บอร์ดประกาศของหน่วยงาน — แอปฝึกหัด Day 1 (Git → PR → CI → Release → Deploy ด้วย Docker / PM2)",
+  "type": "module",
+  "engines": {
+    "node": ">=20.12"
+  },
+  "scripts": {
+    "dev": "node --watch src/server.js",
+    "start": "node src/server.js",
+    "lint": "node scripts/lint.js",
+    "test": "node --test test/*.test.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}

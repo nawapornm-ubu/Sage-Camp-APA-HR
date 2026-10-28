@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>บอร์ดประกาศหน่วยงาน</title>
+  <style>
+    :root { --bg: #f5f6f8; --card: #fff; --text: #1f2933; --muted: #6b7280; --accent: #b45309; --border: #e5e7eb; }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: system-ui, "Sarabun", sans-serif; background: var(--bg); color: var(--text); }
+    header { background: var(--accent); color: #fff; padding: 16px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between; }
+    header h1 { margin: 0; font-size: 1.4rem; }
+    header small { opacity: .85; }
+    main { max-width: 720px; margin: 0 auto; padding: 16px; }
+    form, .item, .box { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px; margin-bottom: 12px; }
+    input, textarea, select { padding: 8px; border: 1px solid var(--border); border-radius: 6px; font: inherit; background: var(--card); color: var(--text); }
+    form input, form textarea { width: 100%; margin: 4px 0 10px; }
+    button { background: var(--accent); color: #fff; border: 0; border-radius: 6px; padding: 8px 14px; font: inherit; cursor: pointer; }
+    button.link { background: none; color: var(--muted); padding: 0; text-decoration: underline; }
+    #toolbar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+    #toolbar:empty { display: none; }
+    .item h2 { margin: 0 0 4px; font-size: 1.1rem; }
+    .meta { color: var(--muted); font-size: .85rem; display: flex; flex-wrap: wrap; gap: 8px; justify-content: space-between; align-items: center; }
+    .actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+    .badge { display: inline-block; font-size: .75rem; padding: 2px 8px; border-radius: 999px; background: #fef3c7; color: #92400e; margin-right: 6px; }
+    .empty { color: var(--muted); text-align: center; }
+    #notice { color: #b91c1c; min-height: 1.2em; }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <h1 id="title">บอร์ดประกาศหน่วยงาน</h1>
+      <small id="runtime">กำลังโหลด...</small>
+    </div>
+  </header>
+  <main>
+    <form id="form">
+      <label>หัวข้อ <input name="title" maxlength="120" required></label>
+      <label>รายละเอียด <textarea name="body" rows="3" maxlength="1000"></textarea></label>
+      <button type="submit">เพิ่มประกาศ</button>
+    </form>
+    <p id="notice" role="status"></p>
+    <section id="panel"></section>
+    <section id="toolbar"></section>
+    <section id="list"></section>
+  </main>
+  <script type="module" src="/app.js"></script>
+</body>
+</html>
