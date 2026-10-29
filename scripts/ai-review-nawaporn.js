@@ -1,6 +1,7 @@
 // AI Review ผ่าน OpenRouter: อ่าน diff ของ PR + กติกาใน AGENTS.md แล้วคอมเมนต์ผลลง PR (ไม่ใช้แพ็กเกจเพิ่ม)
 import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
+import { parseMaxTokens } from './ai-review-config.js';
 
 const {
   OPENROUTER_API_KEY,
@@ -14,6 +15,14 @@ const {
 } = process.env;
 
 const MARKER = '<!-- ai-review -->';
+let maxTokens;
+
+try {
+  maxTokens = parseMaxTokens(process.env.OPENROUTER_MAX_TOKENS);
+} catch (error) {
+  console.error(error.message);
+  process.exit(1);
+}
 
 if (!OPENROUTER_API_KEY) {
   console.log('ไม่พบ OPENROUTER_API_KEY — ข้ามการ review (เช่น PR จาก fork)');
@@ -64,6 +73,7 @@ const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
   body: JSON.stringify({
     model: OPENROUTER_MODEL,
     temperature: 0.2,
+    max_tokens: maxTokens,
     messages: [
       { role: 'system', content: system },
       { role: 'user', content: user },
