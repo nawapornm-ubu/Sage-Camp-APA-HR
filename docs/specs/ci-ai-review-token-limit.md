@@ -5,7 +5,7 @@
 | **Issue** | #3 |
 | **Branch** | `feature/ci-ai-review-token-limit` |
 | **เจ้าของ** | ยังไม่ระบุ |
-| **สถานะ spec** | ร่าง |
+| **สถานะ spec** | อนุมัติแล้ว (โดยผู้ใช้ วันที่ 2026-10-29) |
 
 ## 1. บริบท — ต่อยอดจากอะไร และทำไมต้องมี
 
@@ -18,7 +18,7 @@
 - [ ] แตก branch `feature/ci-ai-review-token-limit` จาก `main` ล่าสุด และติดตั้ง dependencies เดิมแล้ว
 - [ ] `npm test` ผ่านก่อนเริ่มแก้ (ถ้าไม่ผ่าน ให้แจ้งทีม)
 - [ ] อ่าน `AGENTS.md` และ `docs/memory/decisions.md` แล้ว
-- [ ] ผู้ดูแลอนุมัติการแก้ workflow ใต้ `.github/` ตามข้อกำหนดไฟล์ร่วมใน `AGENTS.md`
+- [x] ผู้ใช้อนุมัติการแก้ workflow ใต้ `.github/` ตามข้อกำหนดไฟล์ร่วมใน `AGENTS.md`
 
 ## 3. Contract — สิ่งที่คนอื่นจะพึ่งพา
 
@@ -30,7 +30,7 @@
 
 | ค่า | ชนิด | ค่าเริ่มต้นเมื่อไม่มี | ผู้กำหนด |
 |---|---|---|---|
-| `OPENROUTER_MAX_TOKENS` | จำนวนเต็มบวก | `4096` (ค่าที่เสนอ รออนุมัติ) | GitHub Actions variable / environment ของสคริปต์ |
+| `OPENROUTER_MAX_TOKENS` | จำนวนเต็มบวก | `4096` | GitHub Actions variable / environment ของสคริปต์ |
 
 ค่าดังกล่าวถูกส่งเป็น `max_tokens` ใน body ของ OpenRouter; ค่าไม่ถูกต้องหรือไม่เป็นจำนวนเต็มบวกต้องแจ้งข้อผิดพลาดชัดเจนและหยุดก่อนส่ง request
 
@@ -43,7 +43,7 @@
 | ไฟล์ | สร้าง/แก้ | หน้าที่ |
 |---|---|---|
 | `scripts/ai-review-nawaporn.js` | แก้ | อ่านค่า token limit, ตรวจค่า และแนบ `max_tokens` ใน request |
-| `.github/workflows/ai-nawaporn.yml` | แก้ — ต้องให้ผู้ดูแลอนุมัติ | ส่งค่ากำหนด `OPENROUTER_MAX_TOKENS` ให้สคริปต์ โดยมี fallback ที่สอดคล้องกับค่าเริ่มต้น |
+| `.github/workflows/ai-nawaporn.yml` | แก้ — ผู้ใช้อนุมัติแล้ว | ส่งค่ากำหนด `OPENROUTER_MAX_TOKENS` ให้สคริปต์ โดยมี fallback ที่สอดคล้องกับค่าเริ่มต้น |
 | `scripts/ai-review-config.js` | สร้าง | ฟังก์ชันเล็ก ๆ สำหรับอ่าน/ตรวจค่า token limit เพื่อทดสอบได้โดยไม่เรียกเครือข่าย |
 | `test/ci-ai-review-token-limit.test.js` | สร้าง | ทดสอบค่าเริ่มต้น, ค่าที่กำหนดเอง และค่าที่ไม่ถูกต้อง |
 
@@ -65,14 +65,14 @@
 
 ## 5. ข้อกำหนดสำคัญ — กฎที่ห้ามพลาด
 
-- ต้องส่ง `max_tokens` ใน request เพื่อไม่ให้ OpenRouter ใช้เพดานสูงตามค่าเริ่มต้นของโมเดล.
-- ตรวจ configuration ให้เป็นจำนวนเต็มบวกก่อนเรียก OpenRouter; ห้ามส่ง `NaN`, ศูนย์, ค่าลบ, หรือข้อความดิบเป็นเพดาน.
-- ห้ามแสดง API key, GitHub token, headers หรือ secrets ใน log/error.
-- คงรูปแบบ review, โมเดล, diff input limit, และการโพสต์คอมเมนต์เดิมไว้เหมือนเดิม.
+- ต้องส่ง `max_tokens` ใน request เพื่อไม่ให้ OpenRouter ใช้เพดานสูงตามค่าเริ่มต้นของโมเดล
+- ตรวจ configuration ให้เป็นจำนวนเต็มบวกก่อนเรียก OpenRouter; ห้ามส่ง `NaN`, ศูนย์, ค่าลบ หรือข้อความดิบเป็นเพดาน
+- ห้ามแสดง API key, GitHub token, headers หรือ secrets ใน log/error
+- คงรูปแบบ review, โมเดล, diff input limit และการโพสต์คอมเมนต์เดิมไว้เหมือนเดิม
 
 ## 6. ห้ามทำเกินสโคป — นิยามของคำว่า "พอ"
 
-- ห้ามแก้ไฟล์นอกตารางหัวข้อ 4; การแก้ `.github/workflows/ai-nawaporn.yml` ต้องได้รับอนุมัติจากผู้ดูแลก่อน
+- ห้ามแก้ไฟล์นอกตารางหัวข้อ 4
 - ห้ามติดตั้ง package ใหม่ · ห้าม refactor/จัด format ไฟล์อื่น
 - ยังไม่ทำในรอบนี้: ลด `MAX_DIFF_CHARS` หรือย่อเนื้อหา prompt/input
 - ยังไม่ทำในรอบนี้: เปลี่ยนโมเดล, เพิ่ม retry/fallback, หรือปรับสิทธิ์/วงเงินของ OpenRouter key
@@ -91,7 +91,7 @@
    ```bash
    node --test test/ci-ai-review-token-limit.test.js
    ```
-   ต้องเห็น: มี test ยืนยันว่าค่าว่าง/ไม่ใช่จำนวนเต็ม/ศูนย์/ค่าลบทำให้เกิดข้อผิดพลาด และไม่เรียก OpenRouter
+   ต้องเห็น: มี test ยืนยันว่าค่าว่าง/ไม่ใช่จำนวนเต็ม/ศูนย์/ค่าลบทำให้ตัวตรวจค่าปฏิเสธ; สคริปต์ตรวจค่านี้ก่อนเรียก OpenRouter
 
 3. ตรวจ syntax และ regression tests
 
@@ -106,13 +106,11 @@
    ```bash
    git diff --name-only main...HEAD
    ```
-   ต้องเห็นเฉพาะ `scripts/ai-review-nawaporn.js`, `.github/workflows/ai-nawaporn.yml`, `scripts/ai-review-config.js`, `test/ci-ai-review-token-limit.test.js`
+   ต้องเห็นเฉพาะ `docs/specs/ci-ai-review-token-limit.md`, `scripts/ai-review-nawaporn.js`, `.github/workflows/ai-nawaporn.yml`, `scripts/ai-review-config.js`, `test/ci-ai-review-token-limit.test.js`
 
 ## 8. คำถามที่ยังเปิด
 
-- ค่าเริ่มต้น `4096` token เหมาะสมหรือไม่ หรือผู้ดูแลต้องการค่าอื่น?
-- Actions variable ควรใช้ชื่อ `OPENROUTER_MAX_TOKENS` ตามที่เสนอหรือไม่?
-- ตัดสินแล้ว: ไม่มี
+- ตัดสินแล้ว: ค่าเริ่มต้นใช้ `4096` tokens และชื่อ environment variable คือ `OPENROUTER_MAX_TOKENS` (ผู้ใช้อนุมัติ 2026-10-29)
 
 ## 9. Prompt แนะนำ (คัดลอกไปสั่ง Agent ได้ทันที)
 
