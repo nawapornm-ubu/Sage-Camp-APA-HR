@@ -1,4 +1,4 @@
-name: Nawaporn CI
+name: Nawaporn HR CI
 
 on:
   pull_request:
